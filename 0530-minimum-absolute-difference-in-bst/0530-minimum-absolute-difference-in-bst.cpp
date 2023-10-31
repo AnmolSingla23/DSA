@@ -11,7 +11,8 @@
  */
 class Solution {
 public:
-    
+    int mini = INT_MAX;
+    int prev = INT_MAX;
     void inorder(TreeNode* root,vector<int> &ans){
         if(!root)
             return;
@@ -21,15 +22,30 @@ public:
         inorder(root->right,ans);
     }
     
+    int solve(TreeNode* root){
+        if(root->left)
+            solve(root->left);
+        
+        if(prev!=INT_MAX)
+            mini = min(mini,abs(root->val - prev));
+        prev = root->val;
+        
+        if(root->right)
+            solve(root->right);
+        return mini;
+    }
+    
     int getMinimumDifference(TreeNode* root) {
         
-        vector<int> ans;
-        inorder(root,ans);
-        int mini = INT_MAX;
-        for(int i=1;i<ans.size();i++){
-            if(ans[i] - ans[i-1] < mini)
-                mini = ans[i]-ans[i-1];
-        }
+        // vector<int> ans;
+        // inorder(root,ans);
+        // int mini = INT_MAX;
+        // for(int i=1;i<ans.size();i++){
+        //     if(ans[i] - ans[i-1] < mini)
+        //         mini = ans[i]-ans[i-1];
+        // }
+        // return mini;
+        solve(root);
         return mini;
     }
 };
